@@ -1,6 +1,8 @@
+# Warning this is a work in progress and has not been fully tested yet!
 # User Activity Monitor
 
 This is a Python service that monitors user activity in Windows environments. It checks the logged in user's status and stores the status information in a MySQL database, as well as in logs. The service has been designed to work well in a multi-user environment, making it ideal for tracking user activity in session-based remote desktops.
+
 
 ## Features
 

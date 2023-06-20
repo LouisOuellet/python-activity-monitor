@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 import json
 import os
+import sys
 import subprocess
 from getpass import getpass
 
@@ -14,7 +15,7 @@ packages = [
 def install_requirements():
     # Install the packages
     for package in packages:
-        subprocess.check_call(["pip", "install", package])
+        subprocess.check_call([sys.executable, "-m", "pip", "install", package])
 
 def create_configuration():
     # Get MySQL connection info
@@ -37,9 +38,18 @@ def create_configuration():
             json.dump({"log_level": log_level}, f)
 
 def install_service():
+    # Get the directory of the script
+    script_dir = os.path.dirname(os.path.abspath(__file__))
+    script_path = os.path.join(script_dir, "monitor.py")
+
+    # Use sys.executable to get the Python interpreter path, escape backslashes
+    python_path = sys.executable.replace("\\", "\\\\")
+
+    # Escape backslashes for the script path as well
+    script_path = script_path.replace("\\", "\\\\")
 
     # Install the service
-    os.system('sc create "UserActivityMonitor" binPath= "python monitor.py" start= auto DisplayName= "User Activity Monitor"')
+    os.system(f'sc create "UserActivityMonitor" binPath= "{python_path} {script_path}" start= auto DisplayName= "User Activity Monitor"')
 
 if __name__ == "__main__":
     install_requirements()
